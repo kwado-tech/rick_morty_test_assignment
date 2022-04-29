@@ -1,46 +1,41 @@
+import 'package:casino_test/src/core/exceptions/exceptions.dart';
+import 'package:casino_test/src/data/models/character.dart';
 import 'package:casino_test/src/data/repository/characters_repository.dart';
-import 'package:casino_test/src/presentation/bloc/main_event.dart';
-import 'package:casino_test/src/presentation/bloc/main_state.dart';
+import 'package:casino_test/src/presentation/bloc/bloc_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class MainPageBloc
-    extends Bloc<MainPageEvent, MainPageState> {
+part 'main_event.dart';
+part 'main_bloc.freezed.dart';
+
+class MainPageBloc extends Bloc<MainBlocEvent,
+    BlocState<Failure<ExceptionMessage>, CharacterList>> {
   final CharactersRepository _charactersRepository;
 
-  MainPageBloc(
-    MainPageState initialState,
-    this._charactersRepository,
-  ) : super(initialState) {
-    on<GetTestDataOnMainPageEvent>(
+  MainPageBloc({required CharactersRepository charactersRepository})
+      : _charactersRepository = charactersRepository,
+        super(const BlocState<Failure<ExceptionMessage>,
+            CharacterList>.initial()) {
+    on<MainBlocEvent>(
       (event, emitter) => _getDataOnMainPageCasino(event, emitter),
     );
-    on<DataLoadedOnMainPageEvent>(
-      (event, emitter) => _dataLoadedOnMainPageCasino(event, emitter),
-    );
-    on<LoadingDataOnMainPageEvent>(
-      (event, emitter) => emitter(LoadingMainPageState()),
-    );
-  }
-
-  Future<void> _dataLoadedOnMainPageCasino(
-    DataLoadedOnMainPageEvent event,
-    Emitter<MainPageState> emit,
-  ) async {
-    if (event.characters == null) {
-      emit(SuccessfulMainPageState(event.characters!));
-    } else {
-      emit(UnSuccessfulMainPageState());
-    }
   }
 
   Future<void> _getDataOnMainPageCasino(
-    GetTestDataOnMainPageEvent event,
-    Emitter<MainPageState> emit,
+    MainBlocEvent event,
+    Emitter<BlocState<Failure<ExceptionMessage>, CharacterList>> emit,
   ) async {
-    _charactersRepository.getCharacters(event.page).then(
-      (value) {
-        add(DataLoadedOnMainPageEvent(value));
-      },
+    final _getCharactersEither = await _charactersRepository
+        .getCharacters(event.getCharactersFormParams);
+
+    final _state = _getCharactersEither.fold(
+      (failure) => BlocState<Failure<ExceptionMessage>, CharacterList>.error(
+          failure: failure),
+      (characterList) =>
+          BlocState<Failure<ExceptionMessage>, CharacterList>.success(
+              data: characterList),
     );
+
+    emit(_state);
   }
 }

@@ -1,9 +1,16 @@
+import 'package:casino_test/src/data/repository/characters_repository.dart';
 import 'package:casino_test/src/di/main_di_module.dart';
 import 'package:casino_test/src/presentation/ui/character_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'src/presentation/bloc/main_bloc.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // initialize DI
+  MainDIModule().configure();
   runApp(const MyApp());
 }
 
@@ -12,10 +19,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MainDIModule().configure(GetIt.I);
     return MaterialApp(
       title: 'Test app',
-      home: CharactersScreen(),
+      home: BlocProvider<MainPageBloc>(
+        create: (context) {
+          final _params = GetCharactersFormParams(page: 1);
+          return getIt<MainPageBloc>()
+            ..add(
+              MainBlocEvent.getCharacters(getCharactersFormParams: _params),
+            );
+        },
+        child: CharactersScreen(),
+      ),
     );
   }
 }

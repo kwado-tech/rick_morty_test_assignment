@@ -1,13 +1,20 @@
 import 'package:casino_test/src/data/repository/characters_repository.dart';
 import 'package:casino_test/src/data/repository/characters_repository_impl.dart';
+import 'package:casino_test/src/presentation/bloc/main_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart';
 
-class MainDIModule {
-  void configure(GetIt getIt) {
-    final httpClient = Client();
+final getIt = GetIt.I;
 
+class MainDIModule {
+  void configure() {
+    // blocs
+    getIt.registerFactory<MainPageBloc>(
+        () => MainPageBloc(charactersRepository: getIt()));
+
+    // repositories
+    final _client = Client();
     getIt.registerLazySingleton<CharactersRepository>(
-        () => CharactersRepositoryImpl(httpClient));
+        () => CharactersRepositoryImpl(client: _client));
   }
 }
