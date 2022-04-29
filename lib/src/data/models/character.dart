@@ -16,7 +16,7 @@ class Character extends Equatable {
   final DateTime created;
   final Location origin;
   final Location location;
-  final List<String> episodes;
+  final List<String> episode;
 
   const Character({
     required this.name,
@@ -27,7 +27,7 @@ class Character extends Equatable {
     required this.created,
     required this.origin,
     required this.location,
-    required this.episodes,
+    required this.episode,
   });
 
   factory Character.fromJson(Map<String, dynamic> json) =>
@@ -46,13 +46,13 @@ class Character extends Equatable {
       created,
       origin,
       location,
-      episodes,
+      episode,
     ];
   }
 
   @override
   String toString() {
-    return 'Character(name: $name, status: $status, species: $species, gender: $gender, image: $image, created: $created, origin: $origin, location: $location, episodes: $episodes)';
+    return 'Character(name: $name, status: $status, species: $species, gender: $gender, image: $image, created: $created, origin: $origin, location: $location, episode: $episode)';
   }
 }
 
