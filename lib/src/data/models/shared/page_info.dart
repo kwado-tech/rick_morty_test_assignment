@@ -10,6 +10,12 @@ class PageInfo extends Equatable {
   final String? next;
   final String? previous;
 
+  int? get nextPage {
+    if (next == null) return null;
+    final _parts = next!.split('=');
+    return int.parse(_parts[_parts.length - 1]);
+  }
+
   const PageInfo({
     required this.count,
     required this.pages,
@@ -23,7 +29,7 @@ class PageInfo extends Equatable {
   Map<String, dynamic> toJson() => _$PageInfoToJson(this);
 
   @override
-  List<Object> get props => [count, pages, next!, previous!];
+  List<Object> get props => [count, pages];
 
   @override
   String toString() {

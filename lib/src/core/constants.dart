@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 
 const BASE_URL = 'https://rickandmortyapi.com/api';
 
+class Endpoints {
+  static const kCharacters = 'character';
+}
+
 class Sizing {
   static const kItemElevation = 1.0;
   static const kMaxItemHeight = 150.0;
@@ -10,6 +14,8 @@ class Sizing {
   static const kBorderRadius = 4.0;
   static const kItemBorderRadius = 10.0;
   static const kItemSpacerUnit = 8.0;
+  static const kDebounceDuration = 500;
+  static const kScrollThreshold = 200;
   static const kProgressIndicatorSizeSmall = 20.0;
   static const kProgressIndicatorStrokeWidth = 2.0;
 }
