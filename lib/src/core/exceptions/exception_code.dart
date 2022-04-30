@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:casino_test/src/core/exceptions/exceptions.dart';
+
 class ExceptionCode {
   final String _code;
 
@@ -61,4 +63,12 @@ class ExceptionMessage {
 
   @override
   int get hashCode => _message.hashCode;
+}
+
+class ExceptionMessages {
+  static const NO_INTERNET_CONNECTION =
+      ExceptionType<ExceptionMessage>.serverException(
+    code: ExceptionCode.NO_INTERNET_CONNECTION,
+    message: ExceptionMessage.NO_INTERNET_CONNECTION,
+  );
 }
