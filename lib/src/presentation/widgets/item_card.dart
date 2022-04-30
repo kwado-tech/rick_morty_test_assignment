@@ -1,6 +1,7 @@
 import 'package:casino_test/src/core/constants.dart';
 import 'package:casino_test/src/core/util/width_constraints.dart';
 import 'package:casino_test/src/data/models/character.dart';
+import 'package:casino_test/src/presentation/widgets/shared/cache_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -23,22 +24,20 @@ class ItemCard extends StatelessWidget {
         elevation: Sizing.kItemElevation * 2,
         child: InkWell(
           onTap: onTap,
-          child: Container(
-            height: constraints.maxHeight,
-            width: constraints.maxWidth * .40,
-            decoration: BoxDecoration(
-              borderRadius: _borderRadius,
-              image: DecorationImage(
-                image: NetworkImage(
-                  character.image,
-                ),
-                fit: BoxFit.cover,
+          borderRadius: _borderRadius,
+          child: Hero(
+            tag: character.image,
+            child: Container(
+              height: constraints.maxHeight,
+              width: constraints.maxWidth * .40,
+              decoration: BoxDecoration(
+                borderRadius: _borderRadius,
+              ),
+              child: ClipRRect(
+                borderRadius: _borderRadius,
+                child: CacheNetworkImage(imageUrl: character.image),
               ),
             ),
-            // child: Image.network(
-            //   character.image,
-            //   fit: BoxFit.cover,
-            // ),
           ),
         ),
       );
@@ -61,6 +60,7 @@ class ItemCard extends StatelessWidget {
           elevation: Sizing.kItemElevation,
           child: InkWell(
             onTap: onTap,
+            borderRadius: _borderRadius,
             child: Container(
               alignment: Alignment(0.0, 0.0),
               margin: EdgeInsets.only(left: constraints.maxWidth * .38),
@@ -77,6 +77,7 @@ class ItemCard extends StatelessWidget {
                   Text(
                     character.name,
                     style: Theme.of(context).textTheme.headline4!.copyWith(
+                          fontSize: CustomTypography.kHeadline5,
                           fontWeight: FontWeight.w600,
                         ),
                   ),
