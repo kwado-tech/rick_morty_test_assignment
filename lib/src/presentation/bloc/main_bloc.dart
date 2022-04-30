@@ -76,7 +76,7 @@ class MainPageBloc extends Bloc<MainBlocEvent,
               .copyWith(hasReachedMax: true);
         }
 
-        // merge newly fetched character-list with currently fetched result (copied to a new object so no mutation)
+        // merge newly fetched character-list with existing success-state character-list (copied to a new object so no mutation)
         final _previousCharacterList = (_currentBlocState
                 as Success<Failure<ExceptionMessage>, CharacterList>)
             .data;

@@ -17,17 +17,17 @@ class CharacterDetailsScreen extends StatelessWidget {
       children: [
         CustomChip(
           color: ColorTheme.kIndicatorColor,
-          label: 'Alive',
+          label: character.status,
         ),
         SizedBox(width: Sizing.kItemSpacerUnit),
         CustomChip(
           color: ColorTheme.kAccentColor,
-          label: 'Human',
+          label: character.species,
         ),
         SizedBox(width: Sizing.kItemSpacerUnit),
         CustomChip(
           color: ColorTheme.kPrimaryColor,
-          label: 'Male',
+          label: character.gender,
         ),
       ],
     );

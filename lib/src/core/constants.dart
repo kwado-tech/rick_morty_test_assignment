@@ -2,6 +2,7 @@ import 'package:casino_test/src/core/util/color_util.dart';
 import 'package:flutter/material.dart';
 
 const BASE_URL = 'https://rickandmortyapi.com/api';
+const INITIAL_PAGE = 1;
 
 class Endpoints {
   static const kCharacters = 'character';
@@ -28,7 +29,7 @@ class CustomTypography {
 class ColorTheme {
   static final kPrimaryColor = Colors.blue;
   static final kIndicatorColor = Colors.green;
-  static final kAccentColor = Colors.amber;
+  static final kAccentColor = Colors.amber[800];
   static final kErrorColor = Colors.red;
   static final kGreyColor = Colors.grey;
   static final kSubtitleTextColor = Colors.grey;

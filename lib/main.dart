@@ -1,3 +1,4 @@
+import 'package:casino_test/src/core/constants.dart';
 import 'package:casino_test/src/data/repository/characters_repository.dart';
 import 'package:casino_test/src/di/main_di_module.dart';
 import 'package:casino_test/src/presentation/ui/character_screen.dart';
@@ -21,9 +22,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Test app',
+      debugShowCheckedModeBanner: false,
       home: BlocProvider<MainPageBloc>(
         create: (context) {
-          final _params = GetCharactersFormParams(page: 1);
+          final _params = GetCharactersFormParams(page: INITIAL_PAGE);
           return getIt<MainPageBloc>()
             ..add(
               MainBlocEvent.getCharacters(getCharactersFormParams: _params),
