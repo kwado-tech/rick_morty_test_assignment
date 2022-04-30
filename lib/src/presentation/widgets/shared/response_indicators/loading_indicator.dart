@@ -15,7 +15,7 @@ class LoadingIndicatorType {
         child: CircularProgressIndicator(
           value: progress,
           strokeWidth: Sizing.kProgressIndicatorStrokeWidth,
-          backgroundColor: ColorTheme.kAccentColor,
+          // backgroundColor: ColorTheme.kAccentColor,
         ),
       ),
     );
