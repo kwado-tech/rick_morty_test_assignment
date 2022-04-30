@@ -54,9 +54,7 @@ class MainPageBloc extends Bloc<MainBlocEvent,
             failure: failure),
         (characterList) =>
             BlocState<Failure<ExceptionMessage>, CharacterList>.success(
-          hasReachedMax: false,
-          data: characterList,
-        ),
+                hasReachedMax: false, data: characterList),
       );
 
       return emit(_state);
