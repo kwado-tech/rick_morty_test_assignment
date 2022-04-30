@@ -1,11 +1,16 @@
 import 'package:casino_test/src/core/constants.dart';
 import 'package:casino_test/src/core/exceptions/exceptions.dart';
+import 'package:casino_test/src/core/util/toast_util.dart';
+import 'package:casino_test/src/core/util/width_constraints.dart';
 import 'package:casino_test/src/data/models/character.dart';
 import 'package:casino_test/src/data/repository/characters_repository.dart';
 import 'package:casino_test/src/presentation/bloc/bloc_state.dart';
 import 'package:casino_test/src/presentation/bloc/main_bloc.dart';
+import 'package:casino_test/src/presentation/snapshot_cache/character_snapshot_cache.dart';
 import 'package:casino_test/src/presentation/ui/characted_details_screen.dart';
 import 'package:casino_test/src/presentation/widgets/item_card.dart';
+import 'package:casino_test/src/presentation/widgets/shared/response_indicators/empty_response_indicator.dart';
+import 'package:casino_test/src/presentation/widgets/shared/response_indicators/error_indicator.dart';
 import 'package:casino_test/src/presentation/widgets/shared/response_indicators/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,25 +40,31 @@ class _CharactersScreenState extends State<CharactersScreen> {
     super.dispose();
   }
 
+  void _onFetchCharactersCallback() {
+    final _successCharacterState =
+        context.read<CharacterSnapshotCache>().successCharacterState;
+
+    final _nextPage = _successCharacterState == null
+        ? INITIAL_PAGE
+        : _successCharacterState.data.info.nextPage;
+
+    if (_nextPage != null) {
+      final _getCharactersFormParams = GetCharactersFormParams(page: _nextPage);
+
+      context.read<MainPageBloc>().add(
+            MainBlocEvent.getCharacters(
+              getCharactersFormParams: _getCharactersFormParams,
+            ),
+          );
+    }
+  }
+
   void _onScrollView() {
     if (!_scrollController.hasClients) return;
     final _maxScroll = _scrollController.position.maxScrollExtent;
     final _currentScroll = _scrollController.position.pixels;
     if (_maxScroll - _currentScroll <= _scrollThreshold) {
-      final _nextPage = context.read<MainPageBloc>().state.maybeMap(
-            orElse: () => null,
-            success: (state) => state.data.info.nextPage,
-          );
-
-      if (_nextPage != null) {
-        final _getCharactersFormParams =
-            GetCharactersFormParams(page: _nextPage);
-
-        context.read<MainPageBloc>().add(
-              MainBlocEvent.getCharacters(
-                  getCharactersFormParams: _getCharactersFormParams),
-            );
-      }
+      _onFetchCharactersCallback();
     }
   }
 
@@ -66,22 +77,29 @@ class _CharactersScreenState extends State<CharactersScreen> {
     );
   }
 
-  Widget _buildCharacterListBuilder(
-      Success<Failure<ExceptionMessage>, CharacterList> state) {
-    final _characters = state.data.characters;
+  Widget _buildCharacterListBuilder() {
+    final _state =
+        context.watch<CharacterSnapshotCache>().successCharacterState;
 
-    if (_characters.isEmpty) {
-      // TODO: implement properly
-      return Center(
-        child: Text('No character to display at the moment!'),
+    if (_state == null || _state.data.characters.isEmpty) {
+      return WidthConstraint(context).withHorizontalSymmetricalPadding(
+        child: EmptyResponseIndicator(
+          type: EmptyResponseIndicatorType.simple(
+            context,
+            onActionCallback: () => _onFetchCharactersCallback(),
+            message: 'Sorry! There are no posts to view at this time',
+          ),
+        ),
       );
     }
+
+    final _characters = _state.data.characters;
 
     return ListView.separated(
       cacheExtent: double.maxFinite,
       controller: _scrollController,
       itemCount:
-          state.hasReachedMax ? _characters.length : _characters.length + 1,
+          _state.hasReachedMax ? _characters.length : _characters.length + 1,
       padding: EdgeInsets.symmetric(
         vertical: Sizing.kItemSpacerUnit * 2,
       ),
@@ -117,6 +135,9 @@ class _CharactersScreenState extends State<CharactersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _characterSnapshotCache =
+        context.watch<CharacterSnapshotCache>().successCharacterState;
+
     return Scaffold(
       backgroundColor: ColorTheme.kBackgroundColor,
       appBar: AppBar(
@@ -125,15 +146,46 @@ class _CharactersScreenState extends State<CharactersScreen> {
       body: BlocConsumer<MainPageBloc,
           BlocState<Failure<ExceptionMessage>, CharacterList>>(
         listener: (context, state) {
-          // TODO:
+          state.maybeMap(
+            orElse: () => null,
+            success: (_) {
+              // notify all listeners to rebuild
+              context.read<CharacterSnapshotCache>().notifyAllListeners();
+            },
+            error: (state) {
+              if (_characterSnapshotCache != null) {
+                ToastUtil.showToast(state.failure.exception.message.toString());
+              }
+            },
+          );
         },
         builder: (blocContext, state) {
           return state.maybeMap(
-            orElse: () => _buildLoadingIndicator(),
-            success: (state) => _buildCharacterListBuilder(state),
+            orElse: () {
+              if (_characterSnapshotCache != null) {
+                return _buildCharacterListBuilder();
+              }
+
+              return _buildLoadingIndicator();
+            },
+            success: (state) => _buildCharacterListBuilder(),
             error: (state) {
-              // TODO: implement properly
-              return Center(child: const Text("error"));
+              if (_characterSnapshotCache != null) {
+                return _buildCharacterListBuilder();
+              }
+
+              return Center(
+                child:
+                    WidthConstraint(context).withHorizontalSymmetricalPadding(
+                  child: ErrorIndicator(
+                    type: ErrorIndicatorType.simple(
+                      onRetryCallback: () => _onFetchCharactersCallback(),
+                      code: state.failure.exception.code,
+                      message: state.failure.exception.message.toString(),
+                    ),
+                  ),
+                ),
+              );
             },
           );
         },

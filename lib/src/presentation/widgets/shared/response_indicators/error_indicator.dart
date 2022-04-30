@@ -39,7 +39,12 @@ class ErrorIndicatorType extends Equatable {
                       children: <InlineSpan>[
                         TextSpan(
                           text: message,
-                          style: const TextStyle(fontWeight: FontWeight.normal),
+                          style: Theme.of(context)
+                              .primaryTextTheme
+                              .bodyText1!
+                              .copyWith(
+                                color: ColorTheme.kBlackColor,
+                              ),
                         ),
                       ],
                     ),
@@ -54,9 +59,9 @@ class ErrorIndicatorType extends Equatable {
                   child: Text(
                     'Retry',
                     style: Theme.of(context)
-                        .primaryTextTheme
+                        .textTheme
                         .bodyText1!
-                        .copyWith(color: Theme.of(context).accentColor),
+                        .copyWith(color: ColorTheme.kPrimaryColor),
                   ),
                 ),
               ],
@@ -89,19 +94,24 @@ class ErrorIndicator extends StatelessWidget {
     this.borderRadius,
   }) : super(key: key);
 
-  Color get _backgroundColor => backgroundColor ?? ColorTheme.kGreyColor;
+  Color get _backgroundColor => backgroundColor ?? ColorTheme.kGreyColorLight;
   BorderRadius get _borderRadius =>
       borderRadius ?? BorderRadius.circular(Sizing.kItemSpacerUnit);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(Sizing.kItemSpacerUnit * 2),
-      decoration: BoxDecoration(
-        color: _backgroundColor,
-        borderRadius: _borderRadius,
+    return Material(
+      color: _backgroundColor,
+      borderRadius: _borderRadius,
+      // elevation: Sizing.kItemElevation,
+      child: Container(
+        padding: EdgeInsets.all(Sizing.kItemSpacerUnit * 2),
+        decoration: BoxDecoration(
+          // color: _backgroundColor,
+          borderRadius: _borderRadius,
+        ),
+        child: type.child,
       ),
-      child: type.child,
     );
   }
 }
