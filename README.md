@@ -18,7 +18,8 @@ Add infinite scrolling pagination.
 
 PS: You need to use same libraries, but you can also add more (reasonable amount).
 
-##################################################################################
+################################################################################
+
 Done By: Christian C. Onwe 
 
 This was an exciting challenge and am glad to be part of it.
