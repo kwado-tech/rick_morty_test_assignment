@@ -42,8 +42,7 @@ class ExceptionMessage {
       ExceptionMessage._('Permission denied to access device contacts!');
   static const UNDEFINED =
       ExceptionMessage._('Undefined exception has occured!');
-  static const REQUEST_TIMEOUT =
-      ExceptionMessage._('Sorry! This request has timeout!');
+  static const REQUEST_TIMEOUT = ExceptionMessage._('Request timeout!');
   static const NO_INTERNET_CONNECTION =
       ExceptionMessage._('Sorry! You are not connected to the internet!');
 

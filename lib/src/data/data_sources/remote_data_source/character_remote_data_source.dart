@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:casino_test/src/core/constants.dart';
 import 'package:casino_test/src/data/models/character.dart';
@@ -30,14 +30,20 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
           )
           .timeout(const Duration(seconds: ApiRequests.kRequestTimeout));
 
-      final _jsonMap = json.decode(_result.body) as Map<String, dynamic>;
-      return CharacterList.fromJson(_jsonMap);
+      return CharacterList.fromJson(
+          json.decode(_result.body) as Map<String, dynamic>);
     } catch (e) {
+      if (e is TimeoutException) {
+        throw ExceptionType<ExceptionMessage>.serverException(
+          code: ExceptionCode.REQUEST_TIMEOUT,
+          message: ExceptionMessage.REQUEST_TIMEOUT,
+        );
+      }
+
       //* could be appropriately mapped to a return exception-type
       throw ExceptionType<ExceptionMessage>.serverException(
         code: ExceptionCode.UNDEFINED,
-        message:
-            ExceptionMessage.parse((e as HttpException).message.toString()),
+        message: ExceptionMessage.parse((e as Exception).toString()),
       );
     }
   }
