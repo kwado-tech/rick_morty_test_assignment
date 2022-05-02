@@ -32,6 +32,7 @@ class ColorTheme {
   static final kAccentColor = Colors.amber[800];
   static final kErrorColor = Colors.red;
   static final kGreyColor = Colors.grey;
+  static final kGreyColorLight = Colors.grey.withOpacity(.40);
   static final kSubtitleTextColor = Colors.grey;
   static final kBlackColor = Colors.black;
   static final kBlackColor_54 = Colors.black54;
