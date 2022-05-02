@@ -1,14 +1,34 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import 'package:casino_test/src/data/models/shared/location.dart';
+import 'package:casino_test/src/data/models/shared/page_info.dart';
+
 part 'character.g.dart';
 
 @JsonSerializable()
 class Character extends Equatable {
   final String name;
+  final String status;
+  final String species;
+  final String gender;
   final String image;
+  final DateTime created;
+  final Location origin;
+  final Location location;
+  final List<String> episodes;
 
-  Character(this.name, this.image);
+  const Character({
+    required this.name,
+    required this.image,
+    required this.status,
+    required this.species,
+    required this.gender,
+    required this.created,
+    required this.origin,
+    required this.location,
+    required this.episodes,
+  });
 
   factory Character.fromJson(Map<String, dynamic> json) =>
       _$CharacterFromJson(json);
@@ -16,40 +36,23 @@ class Character extends Equatable {
   Map<String, dynamic> toJson() => _$CharacterToJson(this);
 
   @override
-  List<Object> get props => [name, image];
-
-  @override
-  String toString() => 'Character(name: $name, image: $image)';
-}
-
-class PageInfo extends Equatable {
-  final int count;
-  final int pages;
-  final String? next;
-  final String? previous;
-
-  const PageInfo({
-    required this.count,
-    required this.pages,
-    required this.next,
-    required this.previous,
-  });
-
-  factory PageInfo.fromJson(Map<String, dynamic> json) {
-    return PageInfo(
-      count: json['count'],
-      pages: json['pages'],
-      next: json['next'],
-      previous: json['previous'],
-    );
+  List<Object> get props {
+    return [
+      name,
+      status,
+      species,
+      gender,
+      image,
+      created,
+      origin,
+      location,
+      episodes,
+    ];
   }
 
   @override
-  List<Object> get props => [count, pages, next!, previous!];
-
-  @override
   String toString() {
-    return 'PageInfo(count: $count, pages: $pages, next: $next, previous: $previous)';
+    return 'Character(name: $name, status: $status, species: $species, gender: $gender, image: $image, created: $created, origin: $origin, location: $location, episodes: $episodes)';
   }
 }
 
