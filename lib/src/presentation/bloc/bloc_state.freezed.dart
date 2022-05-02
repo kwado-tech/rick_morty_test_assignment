@@ -20,7 +20,7 @@ mixin _$BlocState<F, T> {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(T data) success,
+    required TResult Function(T data, bool hasReachedMax) success,
     required TResult Function(F failure) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +28,7 @@ mixin _$BlocState<F, T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(T data)? success,
+    TResult Function(T data, bool hasReachedMax)? success,
     TResult Function(F failure)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ mixin _$BlocState<F, T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(T data)? success,
+    TResult Function(T data, bool hasReachedMax)? success,
     TResult Function(F failure)? error,
     required TResult orElse(),
   }) =>
@@ -134,7 +134,7 @@ class _$Initial<F, T> with DiagnosticableTreeMixin implements Initial<F, T> {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(T data) success,
+    required TResult Function(T data, bool hasReachedMax) success,
     required TResult Function(F failure) error,
   }) {
     return initial();
@@ -145,7 +145,7 @@ class _$Initial<F, T> with DiagnosticableTreeMixin implements Initial<F, T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(T data)? success,
+    TResult Function(T data, bool hasReachedMax)? success,
     TResult Function(F failure)? error,
   }) {
     return initial?.call();
@@ -156,7 +156,7 @@ class _$Initial<F, T> with DiagnosticableTreeMixin implements Initial<F, T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(T data)? success,
+    TResult Function(T data, bool hasReachedMax)? success,
     TResult Function(F failure)? error,
     required TResult orElse(),
   }) {
@@ -257,7 +257,7 @@ class _$Loading<F, T> with DiagnosticableTreeMixin implements Loading<F, T> {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(T data) success,
+    required TResult Function(T data, bool hasReachedMax) success,
     required TResult Function(F failure) error,
   }) {
     return loading();
@@ -268,7 +268,7 @@ class _$Loading<F, T> with DiagnosticableTreeMixin implements Loading<F, T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(T data)? success,
+    TResult Function(T data, bool hasReachedMax)? success,
     TResult Function(F failure)? error,
   }) {
     return loading?.call();
@@ -279,7 +279,7 @@ class _$Loading<F, T> with DiagnosticableTreeMixin implements Loading<F, T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(T data)? success,
+    TResult Function(T data, bool hasReachedMax)? success,
     TResult Function(F failure)? error,
     required TResult orElse(),
   }) {
@@ -336,7 +336,7 @@ abstract class $SuccessCopyWith<F, T, $Res> {
   factory $SuccessCopyWith(
           Success<F, T> value, $Res Function(Success<F, T>) then) =
       _$SuccessCopyWithImpl<F, T, $Res>;
-  $Res call({T data});
+  $Res call({T data, bool hasReachedMax});
 }
 
 /// @nodoc
@@ -353,12 +353,17 @@ class _$SuccessCopyWithImpl<F, T, $Res>
   @override
   $Res call({
     Object? data = freezed,
+    Object? hasReachedMax = freezed,
   }) {
     return _then(Success<F, T>(
       data: data == freezed
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
               as T,
+      hasReachedMax: hasReachedMax == freezed
+          ? _value.hasReachedMax
+          : hasReachedMax // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -366,14 +371,17 @@ class _$SuccessCopyWithImpl<F, T, $Res>
 /// @nodoc
 
 class _$Success<F, T> with DiagnosticableTreeMixin implements Success<F, T> {
-  const _$Success({required this.data});
+  const _$Success({required this.data, this.hasReachedMax = false});
 
   @override
   final T data;
+  @override
+  @JsonKey()
+  final bool hasReachedMax;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'BlocState<$F, $T>.success(data: $data)';
+    return 'BlocState<$F, $T>.success(data: $data, hasReachedMax: $hasReachedMax)';
   }
 
   @override
@@ -381,7 +389,8 @@ class _$Success<F, T> with DiagnosticableTreeMixin implements Success<F, T> {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'BlocState<$F, $T>.success'))
-      ..add(DiagnosticsProperty('data', data));
+      ..add(DiagnosticsProperty('data', data))
+      ..add(DiagnosticsProperty('hasReachedMax', hasReachedMax));
   }
 
   @override
@@ -389,12 +398,16 @@ class _$Success<F, T> with DiagnosticableTreeMixin implements Success<F, T> {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is Success<F, T> &&
-            const DeepCollectionEquality().equals(other.data, data));
+            const DeepCollectionEquality().equals(other.data, data) &&
+            const DeepCollectionEquality()
+                .equals(other.hasReachedMax, hasReachedMax));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(data));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(data),
+      const DeepCollectionEquality().hash(hasReachedMax));
 
   @JsonKey(ignore: true)
   @override
@@ -406,10 +419,10 @@ class _$Success<F, T> with DiagnosticableTreeMixin implements Success<F, T> {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(T data) success,
+    required TResult Function(T data, bool hasReachedMax) success,
     required TResult Function(F failure) error,
   }) {
-    return success(data);
+    return success(data, hasReachedMax);
   }
 
   @override
@@ -417,10 +430,10 @@ class _$Success<F, T> with DiagnosticableTreeMixin implements Success<F, T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(T data)? success,
+    TResult Function(T data, bool hasReachedMax)? success,
     TResult Function(F failure)? error,
   }) {
-    return success?.call(data);
+    return success?.call(data, hasReachedMax);
   }
 
   @override
@@ -428,12 +441,12 @@ class _$Success<F, T> with DiagnosticableTreeMixin implements Success<F, T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(T data)? success,
+    TResult Function(T data, bool hasReachedMax)? success,
     TResult Function(F failure)? error,
     required TResult orElse(),
   }) {
     if (success != null) {
-      return success(data);
+      return success(data, hasReachedMax);
     }
     return orElse();
   }
@@ -477,9 +490,11 @@ class _$Success<F, T> with DiagnosticableTreeMixin implements Success<F, T> {
 }
 
 abstract class Success<F, T> implements BlocState<F, T> {
-  const factory Success({required final T data}) = _$Success<F, T>;
+  const factory Success({required final T data, final bool hasReachedMax}) =
+      _$Success<F, T>;
 
   T get data => throw _privateConstructorUsedError;
+  bool get hasReachedMax => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $SuccessCopyWith<F, T, Success<F, T>> get copyWith =>
       throw _privateConstructorUsedError;
@@ -558,7 +573,7 @@ class _$Error<F, T> with DiagnosticableTreeMixin implements Error<F, T> {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(T data) success,
+    required TResult Function(T data, bool hasReachedMax) success,
     required TResult Function(F failure) error,
   }) {
     return error(failure);
@@ -569,7 +584,7 @@ class _$Error<F, T> with DiagnosticableTreeMixin implements Error<F, T> {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(T data)? success,
+    TResult Function(T data, bool hasReachedMax)? success,
     TResult Function(F failure)? error,
   }) {
     return error?.call(failure);
@@ -580,7 +595,7 @@ class _$Error<F, T> with DiagnosticableTreeMixin implements Error<F, T> {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(T data)? success,
+    TResult Function(T data, bool hasReachedMax)? success,
     TResult Function(F failure)? error,
     required TResult orElse(),
   }) {
