@@ -19,12 +19,12 @@ class CharacterDetailsScreen extends StatelessWidget {
           color: ColorTheme.kIndicatorColor,
           label: character.status,
         ),
-        SizedBox(width: Sizing.kItemSpacerUnit),
+        SizedBox(width: Sizing.kSizingMultiple),
         CustomChip(
-          color: ColorTheme.kAccentColor,
+          color: ColorTheme.kSecondaryColor,
           label: character.species,
         ),
-        SizedBox(width: Sizing.kItemSpacerUnit),
+        SizedBox(width: Sizing.kSizingMultiple),
         CustomChip(
           color: ColorTheme.kPrimaryColor,
           label: character.gender,
@@ -41,14 +41,14 @@ class CharacterDetailsScreen extends StatelessWidget {
         padding: EdgeInsets.only(
           left: WidthConstraint(context).contentPadding,
           right: WidthConstraint(context).contentPadding,
-          bottom: Sizing.kItemSpacerUnit,
+          bottom: Sizing.kSizingMultiple,
         ),
         child: Material(
           elevation: Sizing.kItemElevation * 2,
           borderRadius: _borderRadius,
           child: Container(
-            height: Sizing.kItemSpacerUnit * 16,
-            padding: EdgeInsets.all(Sizing.kItemSpacerUnit * 2),
+            height: Sizing.kSizingMultiple * 16,
+            padding: EdgeInsets.all(Sizing.kSizingMultiple * 2),
             decoration: BoxDecoration(
               borderRadius: _borderRadius,
             ),
@@ -84,7 +84,7 @@ class CharacterDetailsScreen extends StatelessWidget {
                         color: ColorTheme.kSubtitleTextColor,
                       ),
                 ),
-                SizedBox(height: Sizing.kItemSpacerUnit * .5),
+                SizedBox(height: Sizing.kSizingMultiple * .5),
                 _buildTags(),
               ],
             ),
@@ -98,7 +98,7 @@ class CharacterDetailsScreen extends StatelessWidget {
     return SliverAppBar(
       // pinned: true,
       backgroundColor: ColorTheme.kBackgroundColor,
-      expandedHeight: Sizing.kItemSpacerUnit * 70,
+      expandedHeight: Sizing.kSizingMultiple * 70,
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
           children: [
@@ -106,7 +106,7 @@ class CharacterDetailsScreen extends StatelessWidget {
               tag: character.image,
               child: Container(
                 color: ColorTheme.kGreyColor,
-                height: Sizing.kItemSpacerUnit * 65,
+                height: Sizing.kSizingMultiple * 65,
                 child: CacheNetworkImage(imageUrl: character.image),
               ),
             ),
@@ -124,8 +124,8 @@ class CharacterDetailsScreen extends StatelessWidget {
     final _borderRadius = BorderRadius.circular(Sizing.kBorderRadius);
 
     return Wrap(
-      spacing: Sizing.kItemSpacerUnit * 2,
-      runSpacing: Sizing.kItemSpacerUnit * 2,
+      spacing: Sizing.kSizingMultiple * 2,
+      runSpacing: Sizing.kSizingMultiple * 2,
       // crossAxisAlignment: WrapCrossAlignment.center,
 
       children: character.episode.map((e) {
@@ -136,8 +136,8 @@ class CharacterDetailsScreen extends StatelessWidget {
           elevation: Sizing.kItemElevation,
           child: Container(
             padding: EdgeInsets.symmetric(
-              horizontal: Sizing.kItemSpacerUnit * 2,
-              vertical: Sizing.kItemSpacerUnit * 1.5,
+              horizontal: Sizing.kSizingMultiple * 2,
+              vertical: Sizing.kSizingMultiple * 1.5,
             ),
             decoration: BoxDecoration(
               borderRadius: _borderRadius,
@@ -164,11 +164,11 @@ class CharacterDetailsScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: Sizing.kItemSpacerUnit * 2),
+                SizedBox(height: Sizing.kSizingMultiple * 2),
                 Text('Episodes'),
-                SizedBox(height: Sizing.kItemSpacerUnit * 2),
+                SizedBox(height: Sizing.kSizingMultiple * 2),
                 _buildEpisodeBuilder(),
-                SizedBox(height: Sizing.kItemSpacerUnit * 2),
+                SizedBox(height: Sizing.kSizingMultiple * 2),
               ],
             ),
           ),

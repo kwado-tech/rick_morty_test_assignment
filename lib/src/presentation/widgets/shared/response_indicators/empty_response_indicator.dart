@@ -23,7 +23,7 @@ class EmptyResponseIndicatorType extends Equatable {
         child: Row(
           children: [
             const Icon(Icons.dashboard),
-            const SizedBox(width: Sizing.kItemSpacerUnit),
+            const SizedBox(width: Sizing.kSizingMultiple),
             Expanded(
               child: Text.rich(
                 TextSpan(
@@ -65,12 +65,12 @@ class EmptyResponseIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       // elevation: Sizing.kItemElevation,
-      borderRadius: BorderRadius.circular(Sizing.kItemSpacerUnit),
+      borderRadius: BorderRadius.circular(Sizing.kSizingMultiple),
       color: backgroundColor ?? ColorTheme.kGreyColorLight,
       child: Container(
-        padding: const EdgeInsets.all(Sizing.kItemSpacerUnit * 2),
+        padding: const EdgeInsets.all(Sizing.kSizingMultiple * 2),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Sizing.kItemSpacerUnit),
+          borderRadius: BorderRadius.circular(Sizing.kSizingMultiple),
         ),
         child: type.child,
       ),

@@ -65,8 +65,8 @@ class ItemCard extends StatelessWidget {
               alignment: Alignment(0.0, 0.0),
               margin: EdgeInsets.only(left: constraints.maxWidth * .38),
               padding: EdgeInsets.symmetric(
-                vertical: Sizing.kItemSpacerUnit * 2,
-                horizontal: Sizing.kItemSpacerUnit * 3,
+                vertical: Sizing.kSizingMultiple * 2,
+                horizontal: Sizing.kSizingMultiple * 3,
               ),
               decoration: BoxDecoration(
                 borderRadius: _borderRadius,

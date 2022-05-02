@@ -9,6 +9,7 @@ import 'package:casino_test/src/presentation/bloc/main_bloc.dart';
 import 'package:casino_test/src/presentation/snapshot_cache/character_snapshot_cache.dart';
 import 'package:casino_test/src/presentation/ui/characted_details_screen.dart';
 import 'package:casino_test/src/presentation/widgets/item_card.dart';
+import 'package:casino_test/src/presentation/widgets/shared/custom_button.dart';
 import 'package:casino_test/src/presentation/widgets/shared/response_indicators/empty_response_indicator.dart';
 import 'package:casino_test/src/presentation/widgets/shared/response_indicators/error_indicator.dart';
 import 'package:casino_test/src/presentation/widgets/shared/response_indicators/loading_indicator.dart';
@@ -77,6 +78,36 @@ class _CharactersScreenState extends State<CharactersScreen> {
     );
   }
 
+  Widget _buildBottomActionIndicator() {
+    return BlocBuilder<MainPageBloc,
+        BlocState<Failure<ExceptionMessage>, CharacterList>>(
+      builder: (context, state) {
+        return state.maybeMap(
+          orElse: () {
+            return SizedBox(
+              height: Sizing.kSizingMultiple * 5,
+              child: _buildLoadingIndicator(isSmallSizedLoadingIndicator: true),
+            );
+          },
+          error: (_) {
+            return WidthConstraint(context).withHorizontalSymmetricalPadding(
+              child: CustomButton(
+                type: ButtonType.withArrowIndicatorButton(
+                  onTap: () => _onFetchCharactersCallback(),
+                  indicator: Icon(
+                    Icons.refresh_rounded,
+                    color: ColorTheme.kWhiteColor,
+                  ),
+                  label: 'Load More Data',
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   Widget _buildCharacterListBuilder() {
     final _state =
         context.watch<CharacterSnapshotCache>().successCharacterState;
@@ -101,17 +132,14 @@ class _CharactersScreenState extends State<CharactersScreen> {
       itemCount:
           _state.hasReachedMax ? _characters.length : _characters.length + 1,
       padding: EdgeInsets.symmetric(
-        vertical: Sizing.kItemSpacerUnit * 2,
+        vertical: Sizing.kSizingMultiple * 2,
       ),
       separatorBuilder: (_, __) {
-        return SizedBox(height: Sizing.kItemSpacerUnit * 3);
+        return SizedBox(height: Sizing.kSizingMultiple * 3);
       },
       itemBuilder: (context, index) {
         if (index >= _characters.length) {
-          return SizedBox(
-            height: Sizing.kItemSpacerUnit * 5,
-            child: _buildLoadingIndicator(isSmallSizedLoadingIndicator: true),
-          );
+          return _buildBottomActionIndicator();
         }
 
         final _character = _characters[index];
