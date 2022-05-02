@@ -1,4 +1,5 @@
 import 'package:casino_test/src/core/network/network_info.dart';
+import 'package:casino_test/src/data/data_sources/remote_data_source/character_remote_data_source.dart';
 import 'package:casino_test/src/data/repository/characters_repository.dart';
 import 'package:casino_test/src/data/repository/characters_repository_impl.dart';
 import 'package:casino_test/src/presentation/bloc/main_bloc.dart';
@@ -16,7 +17,13 @@ class MainDIModule {
 
     // repositories
     getIt.registerLazySingleton<CharactersRepository>(
-      () => CharactersRepositoryImpl(networkInfo: getIt(), client: getIt()),
+      () => CharactersRepositoryImpl(
+          networkInfo: getIt(), remoteDataSource: getIt()),
+    );
+
+    // data-sources
+    getIt.registerLazySingleton<CharacterRemoteDataSource>(
+      () => CharacterRemoteDataSourceImpl(client: getIt()),
     );
 
     // network

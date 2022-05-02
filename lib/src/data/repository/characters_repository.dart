@@ -10,6 +10,7 @@ abstract class CharactersRepository {
   );
 }
 
+// TODO: extract to separate form-params directory
 class GetCharactersFormParams extends Equatable {
   final int page;
 
