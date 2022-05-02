@@ -15,8 +15,8 @@ Character _$CharacterFromJson(Map<String, dynamic> json) => Character(
       created: DateTime.parse(json['created'] as String),
       origin: Location.fromJson(json['origin'] as Map<String, dynamic>),
       location: Location.fromJson(json['location'] as Map<String, dynamic>),
-      episodes:
-          (json['episodes'] as List<dynamic>).map((e) => e as String).toList(),
+      episode:
+          (json['episode'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$CharacterToJson(Character instance) => <String, dynamic>{
@@ -28,5 +28,5 @@ Map<String, dynamic> _$CharacterToJson(Character instance) => <String, dynamic>{
       'created': instance.created.toIso8601String(),
       'origin': instance.origin,
       'location': instance.location,
-      'episodes': instance.episodes,
+      'episode': instance.episode,
     };
