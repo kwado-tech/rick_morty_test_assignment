@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 const BASE_URL = 'https://rickandmortyapi.com/api';
 const INITIAL_PAGE = 1;
 
+class ApiRequests {
+  static const kRequestTimeout = 10; // seconds
+}
+
 class Endpoints {
   static const kCharacters = 'character';
 }
