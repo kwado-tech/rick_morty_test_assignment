@@ -23,9 +23,12 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
   Future<CharacterList> getCharacters(
       {required GetCharactersFormParams getCharactersFormParams}) async {
     try {
-      final _result = await _client.get(
-        Uri.parse('$BASE_URL/character/?page=${getCharactersFormParams.page}'),
-      );
+      final _result = await _client
+          .get(
+            Uri.parse(
+                '$BASE_URL/character/?page=${getCharactersFormParams.page}'),
+          )
+          .timeout(const Duration(seconds: ApiRequests.kRequestTimeout));
 
       final _jsonMap = json.decode(_result.body) as Map<String, dynamic>;
       return CharacterList.fromJson(_jsonMap);
