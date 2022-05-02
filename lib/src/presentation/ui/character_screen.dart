@@ -1,38 +1,12 @@
+import 'package:casino_test/src/core/exceptions/exceptions.dart';
 import 'package:casino_test/src/data/models/character.dart';
-import 'package:casino_test/src/data/repository/characters_repository.dart';
+import 'package:casino_test/src/presentation/bloc/bloc_state.dart';
 import 'package:casino_test/src/presentation/bloc/main_bloc.dart';
-import 'package:casino_test/src/presentation/bloc/main_event.dart';
-import 'package:casino_test/src/presentation/bloc/main_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 @immutable
 class CharactersScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocProvider(
-        create: (context) => MainPageBloc(
-          InitialMainPageState(),
-          GetIt.I.get<CharactersRepository>(),
-        )..add(const GetTestDataOnMainPageEvent(1)),
-        child: BlocConsumer<MainPageBloc, MainPageState>(
-          listener: (context, state) {},
-          builder: (blocContext, state) {
-            if (state is LoadingMainPageState) {
-              return _loadingWidget(context);
-            } else if (state is SuccessfulMainPageState) {
-              return _successfulWidget(context, state);
-            } else {
-              return Center(child: const Text("error"));
-            }
-          },
-        ),
-      ),
-    );
-  }
-
   Widget _loadingWidget(BuildContext context) {
     return Center(
       child: Container(
@@ -44,17 +18,6 @@ class CharactersScreen extends StatelessWidget {
         ),
         child: const CircularProgressIndicator(),
       ),
-    );
-  }
-
-  Widget _successfulWidget(
-      BuildContext context, SuccessfulMainPageState state) {
-    return ListView.builder(
-      cacheExtent: double.infinity,
-      itemCount: state.characters.length,
-      itemBuilder: (context, index) {
-        return _characterWidget(context, state.characters[index]);
-      },
     );
   }
 
@@ -85,6 +48,46 @@ class CharactersScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _successfulWidget(BuildContext context,
+      Success<Failure<ExceptionMessage>, CharacterList> state) {
+    final _characters = state.data.characters;
+
+    if (_characters.isEmpty) {
+      // TODO: implement properly
+      return Center(
+        child: Text('No character to display at the moment!'),
+      );
+    }
+
+    return ListView.builder(
+      cacheExtent: double.maxFinite,
+      itemCount: _characters.length,
+      itemBuilder: (context, index) {
+        return _characterWidget(context, _characters[index]);
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocConsumer<MainPageBloc,
+          BlocState<Failure<ExceptionMessage>, CharacterList>>(
+        listener: (context, state) {},
+        builder: (blocContext, state) {
+          return state.maybeMap(
+            orElse: () => _loadingWidget(context),
+            success: (state) => _successfulWidget(context, state),
+            error: (state) {
+              // TODO: implement properly
+              return Center(child: const Text("error"));
+            },
+          );
+        },
       ),
     );
   }
