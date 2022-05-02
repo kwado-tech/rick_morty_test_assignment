@@ -37,3 +37,5 @@ Packages used
 - internet_connection_checker (internet connection checks)
 - provider (snapshot cache)
 - timeago (nice time-range display)
+
+PS. Couldn't go with TDD as limited time was a factor working on this
