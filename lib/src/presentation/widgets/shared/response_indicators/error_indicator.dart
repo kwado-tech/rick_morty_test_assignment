@@ -26,7 +26,7 @@ class ErrorIndicatorType extends Equatable {
             mainAxisSize: mainAxisSize ?? MainAxisSize.max,
             children: [
               const Icon(Icons.error),
-              const SizedBox(width: Sizing.kItemSpacerUnit),
+              const SizedBox(width: Sizing.kSizingMultiple),
               Expanded(
                 child: Text.rich(
                     TextSpan(
@@ -96,7 +96,7 @@ class ErrorIndicator extends StatelessWidget {
 
   Color get _backgroundColor => backgroundColor ?? ColorTheme.kGreyColorLight;
   BorderRadius get _borderRadius =>
-      borderRadius ?? BorderRadius.circular(Sizing.kItemSpacerUnit);
+      borderRadius ?? BorderRadius.circular(Sizing.kSizingMultiple);
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +105,7 @@ class ErrorIndicator extends StatelessWidget {
       borderRadius: _borderRadius,
       // elevation: Sizing.kItemElevation,
       child: Container(
-        padding: EdgeInsets.all(Sizing.kItemSpacerUnit * 2),
+        padding: EdgeInsets.all(Sizing.kSizingMultiple * 2),
         decoration: BoxDecoration(
           // color: _backgroundColor,
           borderRadius: _borderRadius,

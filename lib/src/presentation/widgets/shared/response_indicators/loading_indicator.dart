@@ -24,7 +24,7 @@ class LoadingIndicatorType {
   factory LoadingIndicatorType.linearProgressIndicator() {
     return LoadingIndicatorType._(
       child: LinearProgressIndicator(
-        color: ColorTheme.kAccentColor,
+        color: ColorTheme.kSecondaryColor,
         backgroundColor: ColorTheme.kTransparentColor,
       ),
     );

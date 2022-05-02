@@ -20,14 +20,14 @@ class CustomChip extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: _backgroundColor ?? Colors.grey,
-        borderRadius: BorderRadius.circular(Sizing.kItemSpacerUnit * 2),
+        borderRadius: BorderRadius.circular(Sizing.kSizingMultiple * 2),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (prefix != null) ...[
             Container(
-              padding: EdgeInsets.all(Sizing.kItemSpacerUnit),
+              padding: EdgeInsets.all(Sizing.kSizingMultiple),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: _backgroundColor ?? Colors.grey,
@@ -35,12 +35,12 @@ class CustomChip extends StatelessWidget {
               child: Text(prefix!),
             ),
           ],
-          SizedBox(width: Sizing.kItemSpacerUnit),
+          SizedBox(width: Sizing.kSizingMultiple),
           Padding(
             padding: EdgeInsets.only(
-              top: Sizing.kItemSpacerUnit * .5,
-              bottom: Sizing.kItemSpacerUnit * .5,
-              right: Sizing.kItemSpacerUnit * 1.5,
+              top: Sizing.kSizingMultiple * .5,
+              bottom: Sizing.kSizingMultiple * .5,
+              right: Sizing.kSizingMultiple * 1.5,
             ),
             child: Text(
               label,
