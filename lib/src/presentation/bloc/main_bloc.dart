@@ -1,3 +1,4 @@
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:casino_test/src/core/constants.dart';
 import 'package:casino_test/src/core/exceptions/exceptions.dart';
 import 'package:casino_test/src/data/models/character.dart';
@@ -6,16 +7,16 @@ import 'package:casino_test/src/presentation/bloc/bloc_state.dart';
 import 'package:casino_test/src/presentation/snapshot_cache/character_snapshot_cache.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:stream_transform/stream_transform.dart';
+// import 'package:stream_transform/stream_transform.dart';
 
 part 'main_event.dart';
 part 'main_bloc.freezed.dart';
 
-const _duration = Duration(milliseconds: Sizing.kDebounceDuration);
+// const _duration = Duration(milliseconds: Sizing.kDebounceDuration);
 
-EventTransformer<Event> _debounce<Event>(Duration duration) {
-  return (events, mapper) => events.debounce(duration).switchMap(mapper);
-}
+// EventTransformer<Event> _debounce<Event>(Duration duration) {
+//   return (events, mapper) => events.debounce(duration).switchMap(mapper);
+// }
 
 class MainPageBloc extends Bloc<MainBlocEvent,
     BlocState<Failure<ExceptionMessage>, CharacterList>> {
@@ -31,7 +32,7 @@ class MainPageBloc extends Bloc<MainBlocEvent,
             CharacterList>.initial()) {
     on<MainBlocEvent>(
       (event, emitter) => _getDataOnMainPageCasino(event, emitter),
-      transformer: _debounce(_duration),
+      transformer: droppable(),
     );
   }
 
